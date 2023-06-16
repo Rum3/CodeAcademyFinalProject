@@ -72,8 +72,8 @@
 
 <div class="login">
   <div class="container">
-    <h2>Login</h2>
-    <form action="{{ route('authenticate') }}" method="post">
+    <h2>Register</h2>
+    <form action="{{ route('authenticate') }}" method="POST">
         @csrf
       <label for="email">Email:</label>
       <input type="email" id="email" name="email" value="{{ old('email') }}">@error('email')<p style="color: red">{{$message}}</p>@enderror

@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Auth;
 
 use App\Models\User;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use App\Mail\UserActivationMail;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -15,7 +16,7 @@ use Illuminate\Support\Facades\Validator;
 class RegisterController extends Controller
 {
     public function showRegForm() {
-        return view('register');
+        return view('emails.register');
     }
 
     public function createUser(Request $request) {
@@ -27,24 +28,27 @@ class RegisterController extends Controller
             'password_again' => 'required|same:password'
         ]);
 
-        // dd($request->email);
+             // Generate activation token
+        $activation_token = Str::random(60);
 
-            //Activation code
-            $code = Str::random(60);
+        $user = User::create([
+            'role' => 'regular',
+            'remember_token' => '',
+            'email' => $request['email'],
+            'name' => $request['name'],
+            'password' => Hash::make($request['password']),
+            'activation_token' => $activation_token, // Save token in the database
+            'active' => 0,
+            'password_reset_token' => '',
+        ]);
 
-            $user = User::create([
-                'email' => $request['email'],
-                'name' => $request['name'],
-                'password' => Hash::make($request['password']),
-                'code' => $code,
-                'active' => 0
-            ]);
+        $activationUrl = route('activate', ['token' => $activation_token]);
+        Mail::to($user->email)->send(new UserActivationMail($user->name, $activationUrl));
 
-            auth()->login($user);
 
-            return redirect('/');
+        return redirect('/')->with('message', 'Registered successfully. Please check your email to activate your account.');
+    }
 
-        }
     public function showLoginForm() {
         return view('login');
     }
@@ -56,10 +60,11 @@ class RegisterController extends Controller
             'password'=>'required'
         ]);
 
+        $remember = $request->input('remember');
         // dd($request->name);
 
 
-        if(auth()->attempt($userFields)) {
+        if(auth()->attempt($userFields, $remember)) {
             $request->session()->regenerate();
 
             return redirect('/');

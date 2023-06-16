@@ -17,7 +17,11 @@ class UserFactory extends Factory
      */
     public function definition(): array
     {
+        $code = Str::random(60);
         return [
+            'role' => 'regular',
+            'active' => boolval(false),
+            'activation_token'=> $code,
             'name' => fake()->name(),
             'email' => fake()->unique()->safeEmail(),
             'email_verified_at' => now(),

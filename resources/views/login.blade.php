@@ -13,7 +13,7 @@
 
     .container {
       width: 350px;
-      height: 300px;
+      height: 360px;
       padding: 15px;
       border: 1px solid #ccc;
       border-radius: 5px;
@@ -69,24 +69,35 @@
     }
     </style>
 
+@if (session('message'))
+    <div class="alert alert-success">
+        {{ session('message') }}
+    </div>
+@endif
 <div class="login">
   <div class="container">
     <h2>Login</h2>
     <form action="{{ route('login') }}" method="post">
-        @csrf
+      @csrf
       <label for="name">Username:</label>
       <input type="text" id="name" name="name" required>
       @error('name')
       <p style="color:red">{{ $message }}</p>
       @enderror
-
+  
       <label for="password">Password:</label>
       <input type="password" id="password" name="password" required>
-
+  
+      <!-- Remember me -->
+      <div>
+          <input type="checkbox" id="remember" name="remember">
+          <label for="remember">Remember me</label>
+      </div>
+  
       <input type="submit" value="Login">
-    </form>
+  </form>
     <div class="links">
-      <a href="forgot_password.php">Forgotten Password</a>
+      <a href="{{route('password.request')}}">Forgotten Password</a>
       <a href="{{ route('register') }}">Sign In</a>
     </div>
   </div>
