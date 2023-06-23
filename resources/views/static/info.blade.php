@@ -1,4 +1,7 @@
 @extends('layout')
+
+@section('title', 'За Нас')
+
 @section('content')
 
 <div class="info">

@@ -1,8 +1,9 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
 
 return new class extends Migration
 {
@@ -11,16 +12,17 @@ return new class extends Migration
      */
     public function up(): void
     {
+
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->string('role')->default('Regular');
             $table->string('name');
             $table->string('email')->unique();
-            $table->string('activation_token')->nullable();
+            $table->string('password');
+            $table->string('activation_token')->default("Nocode");
             $table->boolean('active')->default(false);
             $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');
             $table->string('password_reset_token')->nullable();
+            $table->string('role')->default('regular');
             $table->rememberToken();
             $table->timestamps();
         });

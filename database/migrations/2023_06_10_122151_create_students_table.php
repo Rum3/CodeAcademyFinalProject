@@ -11,19 +11,16 @@ class CreateStudentsTable extends Migration
     {
         Schema::create('students', function (Blueprint $table) {
             $table->id();
-            $table->string('first_name');
-            $table->string('last_name');
-            $table->string('email');
+            $table->string('student_name');
+            $table->string('student_lastname');
+            $table->string('email')->unique();
             $table->string('phone');
             $table->string('country');
             $table->string('city');
-            $table->array('languages');
+            $table->string('language');
+            $table->string('languageScore');
             $table->string('repository');
-            $table->string('info');
-            $table->float('activity');
-            $table->float('overall_performance');
-            $table->string('oop');
-            $table->float('final_score');
+            $table->longText('information');
             $table->timestamps();
         });
     }

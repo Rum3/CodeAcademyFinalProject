@@ -9,5 +9,10 @@ class Lecture extends Model
 {
     protected $table = 'lectures';
 
-    protected $fillable = ['lecture', 'title'];
+    protected $fillable = ['lecture_name', 'description', 'homework'];
+
+    public function module()
+    {
+        return $this->belongsTo(Module::class);
+    }
 }

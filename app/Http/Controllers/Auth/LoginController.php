@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\Auth;
 
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
@@ -36,5 +38,47 @@ class LoginController extends Controller
     public function __construct()
     {
         $this->middleware('guest')->except('logout');
+    }
+
+    public function showLoginForm()
+    {
+        return view('login');
+    }
+
+    public function login(Request $request)
+    {
+
+        $userFields = $request->validate([
+            'name' => 'required',
+            'password' => 'required'
+        ]);
+
+        $remember = $request->input('remember');
+
+        if (Auth::attempt($userFields, $remember)) {
+            $user = auth()->user();
+            if ($user->active == 0) {
+                Auth::logout(); // log the user out
+                return back()->withErrors([
+                    'name' => 'Please activate your account before logging in.',
+                ]);
+            }
+
+            $request->session()->regenerate();
+            return redirect('/');
+        }
+
+        return back()->withErrors(['name' => 'Invalid Credentials']);
+    }
+
+    public function logout(Request $request)
+    {
+
+        Auth::logout();
+
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return redirect('/')->with('message', 'Успешно излизане!');
     }
 }

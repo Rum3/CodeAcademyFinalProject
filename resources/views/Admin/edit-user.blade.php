@@ -1,6 +1,6 @@
-@extends('Admin.dashboard')
+@extends('admin.dashboard')
 @section('content2')
-    <form method="POST" action="{{ route('user-update', ['id'=>$user->id]) }}">
+    <form method="POST" action="{{ route('user.update', ['id'=>$user->id]) }}">
         @csrf
         @method('PUT')
         <div class="relative bottom-40 left-60 w-3/4 overflow-hidden rounded-lg border border-gray-200 shadow-md m-5">
@@ -26,12 +26,12 @@
               </td>
               <td class="px-6 py-4">
                 <div>
-                    <select class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-70 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" name="role_type">
-                        <option value="Admin">Admin</option>
-                        <option value="Student">Student</option>
-                        <option value="Еmployer">Еmployer</option>
-                        <option value="Teacher">Teacher</option>
-                        <option value="Regular">Regular</option>
+                    <select class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-70 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" name="role">
+                        <option value="admin">admin</option>
+                        <option value="student">student</option>
+                        <option value="employer">employer</option>
+                        <option value="teacher">teacher</option>
+                        <option value="regular">regular</option>
                     </select>
                 </div>
               </td>

@@ -1,43 +1,62 @@
 @extends('layout')
 @section('content')
-<div>
-    <table class="table-auto w-full">
-        <thead>
-            <tr>
-                <th class="px-4 py-2">Name</th>
-                <th class="px-4 py-2">не знам ко да пиша</th>
-                <th class="px-4 py-2">Ацтион</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach ($students as $student)
-            <tr class="{{ $loop->iteration % 2 === 0 ? 'bg-gray-200' : '' }}">
-                <td class="border px-4 py-2">
-                    <label for="resume-toggle-{{ $student->id }}">
-                        {{ $student->name }}
-                    </label>
-                </td>
-                <td class="border px-4 py-2"></td>
-                <td class="border px-4 py-2 flex items-center">
-                    <a href="{{ route('redirectToView') }}" class="text-blue-500 mr-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
-                            <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207 11.207 2.5zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293l6.5-6.5zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325z"/>
-                        </svg>
-                    </a>
-                    <a href="{{ route('downloadResume', $student->id) }}" class="text-blue-500 mr-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-folder" viewBox="0 0 16 16">
-                            <path d="M.54 3.87.5 3a2 2 0 0 1 2-2h3.672a2 2 0 0 1 1.414.586l.828.828A2 2 0 0 0 9.828 3h3.982a2 2 0 0 1 1.992 2.181l-.637 7A2 2 0 0 1 13.174 14H2.826a2 2 0 0 1-1.991-1.819l-.637-7a1.99 1.99 0 0 1 .342-1.31zM2.19 4a1 1 0 0 0-.996 1.09l.637 7a1 1 0 0 0 .995.91h10.348a1 1 0 0 0 .995-.91l.637-7A1 1 0 0 0 13.81 4H2.19zm4.69-1.707A1 1 0 0 0 6.172 2H2.5a1 1 0 0 0-1 .981l.006.139C1.72 3.042 1.95 3 2.19 3h5.396l-.707-.707z"/>
-                        </svg>
-                    </a>
-                    <a href="{{ route('downloadResume', $student->id) }}" class="text-blue-500">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
-                            <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/><path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
-                        </svg>
-                    </a>
-                </td>
-            </tr>
-            @endforeach
-        </tbody>
-    </table>
-</div>
-@endsection
+<div class="max-w-2xl mx-auto p-6 bg-gray-200">
+    <!-- add_editUsers.blade.php -->
+      @if(session('success'))
+          <div class="alert alert-success">{{ session('success') }}</div>
+      @endif
+      <h1 class="text-lg font-bold mb-4">Add/Edit student</h1>
+      <form action="{{ isset($student) ? route('student.update', $student) : route('student.store') }}" method="post">
+          @csrf
+          @if(isset($student))
+              @method('put')
+          @endif
+          <input type="text" id="student_name" name="student_name" placeholder="Name" value="{{ isset($student) ? $student->student_name : '' }}" required class="w-1/2,1 py-2 px-4 mb-4 rounded border border-gray-300">
+          <input type="text" id="student_lastname" name="student_lastname" placeholder="Фамилия" value="{{ isset($student) ? $student->student_lastname : '' }}" required class="w-1/2 py-2 px-4 mb-4 rounded border border-gray-300">
+          <input type="email" id="email" name="email" placeholder="Email" value="{{ isset($student) ? $student->email : '' }}" required class="w-full py-2 px-4 mb-4 rounded border border-gray-300">
+          <input type="tel" id="phone" value="{{ isset($student) ? $student->phone : '' }}" name="phone" placeholder="Телефон" required class="w-full py-2 px-4 mb-4 rounded border border-gray-300">
+          <input type="text" id="country" name="country" value="{{ isset($student) ? $student->country : '' }}" placeholder="Държава" required class="w-1/2,1 py-2 px-4 mb-4 rounded border border-gray-300">
+          <input type="text" id="city" name="city" value="{{ isset($student) ? $student->city : '' }}" placeholder="Град" required class="w-1/2 py-2 px-4 mb-4 rounded border border-gray-300">
+          <input type="text" id="language" name="language" value="{{ isset($student) ? $student->language : '' }}" class="w-4/5 py-2 px-4 mb-4 rounded border border-gray-300" placeholder="Език" required>
+          <input type="text" id="languageScore" name="languageScore" value="{{ isset($student) ? $student->languageScore : '' }}" class="w-4/5 py-2 px-4 mb-4 rounded border border-gray-300" placeholder="languageScore" required>
+          <button type="button" class="w-1/8 py-2 px-4 mb-4 rounded border border-gray-300 bg-green-500 text-white">+</button>
+          <input type="text" id="repository" name="repository" value="{{ isset($student) ? $student->repository : '' }}" class="w-4/5 py-2 px-4 mb-4 rounded border border-gray-300" placeholder="Repository" required>
+          <button type="button" class="w-1/8 py-2 px-4 mb-4 rounded border border-gray-300 bg-green-500 text-white">+</button>
+          <textarea id="information" name="information" value="{{ isset($student) ? $student->information : '' }}" rows="4" cols="50" required class="w-full py-2 px-4 mb-4 rounded border border-gray-300" placeholder="Кратка информация"></textarea>
+          <div class="flex justify-end">
+    <button type="submit" class="bg-green-500 text-white py-2 px-4 rounded">SAVE</button>
+  </div>
+      </form>
+      <div id="app">
+      <h1 class="text-lg font-bold cursor-pointer" @click="toggleForm">users details</h1>
+      <form :class="{ hidden: !showForm }" action="">
+        <input type="text" value="URL" class="w-full py-2 px-4 mb-4 rounded border border-gray-300">
+        <input type="text" class="w-4/5 py-2 px-4 mb-4 rounded border border-gray-300" value="web page name">
+        <button type="button" class="w-1/8 py-2 px-4 mb-4 rounded border border-gray-300 bg-green-500 text-white ml-auto">+</button>
+        <input type="text" value="messenger name" class="w-full py-2 px-4 mb-4 rounded border border-gray-300">
+        <input type="text" class="w-4/5 py-2 px-4 mb-4 rounded border border-gray-300" value="username">
+        <button type="button" class="w-1/8 py-2 px-4 mb-4 rounded border border-gray-300 bg-green-500 text-white">+</button>
+        <input type="text" class="w-4/5 py-2 px-4 mb-4 rounded border border-gray-300" value="hobby">
+        <button type="button" class="w-1/8 py-2 px-4 mb-4 rounded border border-gray-300 bg-green-500 text-white">+</button>
+        <input type="text" class="w-4/5 py-2 px-4 mb-4 rounded border border-gray-300" value="skills">
+        <button type="button" class="w-1/8 py-2 px-4 mb-4 rounded border border-gray-300 bg-green-500 text-white">+</button>
+        <button type="submit" class="bg-green-500 text-white py-2 px-4 rounded">SAVE</button>
+      </form>
+    </div>
+    <script src="https://unpkg.com/vue@2.6.14/dist/vue.js"></script>
+    <script>
+      new Vue({
+        el: "#app",
+        data: {
+          showForm: false
+        },
+        methods: {
+          toggleForm() {
+            this.showForm = !this.showForm;
+          }
+        }
+      });
+    </script>
+    <script src="{{ asset('js/app.js') }}"></script>
+  </div>
+  @endsection

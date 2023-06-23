@@ -84,21 +84,21 @@
       @error('name')
       <p style="color:red">{{ $message }}</p>
       @enderror
-  
+
       <label for="password">Password:</label>
       <input type="password" id="password" name="password" required>
-  
+
       <!-- Remember me -->
       <div>
           <input type="checkbox" id="remember" name="remember">
           <label for="remember">Remember me</label>
       </div>
-  
+
       <input type="submit" value="Login">
   </form>
     <div class="links">
       <a href="{{route('password.request')}}">Forgotten Password</a>
-      <a href="{{ route('register') }}">Sign In</a>
+      <a href="{{ route('register') }}">Sign Up</a>
     </div>
   </div>
 </div>

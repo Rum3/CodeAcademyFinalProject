@@ -32,13 +32,12 @@ class RegisterController extends Controller
         $activation_token = Str::random(60);
 
         $user = User::create([
-            'role' => 'regular',
-            'remember_token' => '',
-            'email' => $request['email'],
             'name' => $request['name'],
+            'email' => $request['email'],
             'password' => Hash::make($request['password']),
             'activation_token' => $activation_token, // Save token in the database
             'active' => 0,
+            'remember_token' => '',
             'password_reset_token' => '',
         ]);
 
@@ -49,38 +48,6 @@ class RegisterController extends Controller
         return redirect('/')->with('message', 'Registered successfully. Please check your email to activate your account.');
     }
 
-    public function showLoginForm() {
-        return view('login');
-    }
 
-    public function login(Request $request) {
-
-        $userFields = $request->validate([
-            'name'=>'required',
-            'password'=>'required'
-        ]);
-
-        $remember = $request->input('remember');
-        // dd($request->name);
-
-
-        if(auth()->attempt($userFields, $remember)) {
-            $request->session()->regenerate();
-
-            return redirect('/');
-        }
-
-        return back()->withErrors(['name' => 'Invalid Credentials']);
-    }
-
-    public function logout(Request $request) {
-
-            Auth::logout();
-
-            $request->session()->invalidate();
-            $request->session()->regenerateToken();
-
-            return redirect('/')->with('message', 'Успешно излизане!');
-    }
 
 }

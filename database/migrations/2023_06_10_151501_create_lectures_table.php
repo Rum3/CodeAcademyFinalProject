@@ -11,16 +11,19 @@ return new class extends Migration
      */
     public function up(): void
     {
+        if(!Schema::hasTable('lectures'))
         Schema::create('lectures', function (Blueprint $table) {
             $table->id();
-            $table->integer('lecture_number');
+            $table->integer('module_id');
             $table->string('lecture_name');
-            $table->string('homework');
-            $table->string('absence');
-            $table->float('score_lecutre');
+            $table->longText('description');
+            $table->text('homework')->nullable();
             $table->timestamps();
+
+            $table->foreign('module_id')->references('id')->on('modules')->onDelete('cascade');
         });
-    }
+
+}
 
     /**
      * Reverse the migrations.

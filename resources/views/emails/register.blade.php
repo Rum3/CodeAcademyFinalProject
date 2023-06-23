@@ -7,7 +7,7 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 50vh;
+      height: 60vh;
       margin: 0;
     }
 
@@ -75,11 +75,12 @@
     <h2>Register</h2>
     <form action="{{ route('authenticate') }}" method="POST">
         @csrf
+      <label for="name">Username:</label>
+      <input type="text" id="name" name="name" value="{{ old('name') }}">@error('name')<p style="color: red">{{$message}}</p>@enderror
+
       <label for="email">Email:</label>
       <input type="email" id="email" name="email" value="{{ old('email') }}">@error('email')<p style="color: red">{{$message}}</p>@enderror
 
-      <label for="name">Username:</label>
-      <input type="text" id="name" name="name" value="{{ old('name') }}">@error('name')<p style="color: red">{{$message}}</p>@enderror
 
       <label for="password">Password:</label>
       <input type="password" id="password" name="password">@error('password')<p style="color: red">{{$message}}</p>@enderror

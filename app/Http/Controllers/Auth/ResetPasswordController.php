@@ -22,15 +22,15 @@ class ResetPasswordController extends Controller
         // Validate the request
         $request->validate([
             'token' => 'required',
-            'email' => 'required|email',
+            // 'email' => 'required|email',
             'password' => 'required|confirmed|min:6',
         ]);
 
         $token = $request->token;
-        $email = $request->email;
+        // $email = $request->email;
         $password = $request->password;
 
-        $user = User::where('email', $email)->first();
+        $user = User::where('password_reset_token', $token)->first();
 
         // Verify if the token matches
         if ($user->password_reset_token != $token) {

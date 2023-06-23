@@ -19,9 +19,8 @@ class ActivationController extends Controller
             'active' => 1,
         ]);
 
-        // Optionally, you can automatically log in the user after activation
         auth()->login($user);
 
-        return redirect('/login')->with('message', 'Your account has been activated. You are now logged in.');
+        return redirect('/')->with('message', 'Your account has been activated. You are now logged in.');
     }
 }
