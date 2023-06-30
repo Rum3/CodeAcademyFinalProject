@@ -4,6 +4,7 @@
 namespace App\Http\Controllers;
 
 
+use App\Models\Lecture;
 use App\Models\Student;
 
 class StudentsController extends Controller
@@ -22,9 +23,8 @@ class StudentsController extends Controller
     }
 
     public function showTrainings() {
-
-
-        return view('student.trainings',['students'=>Student::all()]);
+        $lectures = Lecture::all();
+        return view('student.trainings',compact('lectures'));
     }
 
 }

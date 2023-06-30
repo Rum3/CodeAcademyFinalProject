@@ -9,19 +9,19 @@ class CreateStudentsTable extends Migration
 {
     public function up()
     {
+        if(!Schema::hasTable('students'))
         Schema::create('students', function (Blueprint $table) {
             $table->id();
-            $table->string('student_name');
-            $table->string('student_lastname');
-            $table->string('email')->unique();
+            $table->integer('user_id');
+            $table->string('first_name');
+            $table->string('last_name');
             $table->string('phone');
             $table->string('country');
             $table->string('city');
-            $table->string('language');
-            $table->string('languageScore');
-            $table->string('repository');
             $table->longText('information');
             $table->timestamps();
+
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 

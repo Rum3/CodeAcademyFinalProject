@@ -18,7 +18,7 @@
         <span class="ml-2">Add Student</span>
     </a>
 </th>
-                <th scope="col" class="px-6 py-4 font-large text-gray-900">Кратка информация</th>
+                <th scope="col" class="px-6 py-4 font-large text-gray-900">Add Skills</th>
                 <th scope="col" class="px-6 py-4 font-large text-gray-900">Action</th>
             </tr>
         </thead>
@@ -27,10 +27,12 @@
             <tr class="{{ $loop->iteration % 2 === 0 ? 'bg-gray-200' : '' }}">
                 <td class="px-6 py-4">
                     <label for="resume-toggle-{{ $student->id }}">
-                        {{ $student->student_name}} {{ $student->student_lastname}}
+                        {{ $student->first_name}} 
                     </label>
                 </td>
-                <td class="px-6 py-4">{{ $student->information }}</td>
+                <td class="px-6 py-4">
+                <a href="{{ route('student.skill', ['student_id' => $student->id]) }}">Add</a>
+                </td>
                 <td class="px-6 py-4 flex items-center">
                     <a href="{{ route('student.edit', ['student' => $student->id]) }}" class="text-blue-500 mr-2">
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-pencil transform hover:scale-110" viewBox="0 0 16 16">

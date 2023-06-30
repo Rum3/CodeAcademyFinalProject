@@ -44,6 +44,12 @@ class Kernel extends HttpKernel
             \Illuminate\Routing\Middleware\ThrottleRequests::class.':api',
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
         ],
+
+        // 'admin' => [
+        //     // \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
+        //     // \App\Http\Middleware\AdminMiddleware::class,
+        //     \App\Http\Middleware\TeacherMiddleware::class
+        // ],
     ];
 
     /**
@@ -64,9 +70,11 @@ class Kernel extends HttpKernel
         'signed' => \App\Http\Middleware\ValidateSignature::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
-        'isAdmin' => \App\Http\Middleware\AdminMiddleware::class,
-        'isStudent' => \App\Http\Middleware\StudentMiddleware::class,
-        'isTeacher' => \App\Http\Middleware\TeacherMiddleware::class,
-        'isEmployer' => \App\Http\Middleware\EmployerMiddleware::class
+        // 'isAdmin' => \App\Http\Middleware\AdminMiddleware::class,
+        'isAdminOrTeacher' => \App\Http\Middleware\AdminOrTeacherMiddleware::class,
+        // 'isStudent' => \App\Http\Middleware\StudentMiddleware::class,
+        // 'isTeacher' => \App\Http\Middleware\TeacherMiddleware::class,
+        // 'isEmployer' => \App\Http\Middleware\EmployerMiddleware::class
+        'role' => \App\Http\Middleware\RoleMiddleware::class
     ];
 }

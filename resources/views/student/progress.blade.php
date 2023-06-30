@@ -20,18 +20,17 @@
                 <th scope="col" class="px-6 py-4 font-large text-gray-900">Name</th>
                 <th scope="col" class="px-6 py-4 font-large text-gray-900">Activity</th>
                 <th scope="col" class="px-6 py-4 font-large text-gray-900">Overall Performance</th>
-                <th scope="col" class="px-6 py-4 font-large text-gray-900">OOP</th>
                 <th scope="col" class="px-6 py-4 font-large text-gray-900">Final Score</th>
                 <th scope="col" class="px-6 py-4 font-large text-gray-900">Languages</th>
             </tr>
         </thead>
         <tbody class="divide-y divide-gray-100 border-t border-gray-100">
             @foreach($students as $student)
-            @if($student->id === 1)
+            @if($student->id === 9)
             <tr class="hover:bg-gray-50">
                 <td class="px-6 py-4 relative">
                     <label for="resume-toggle-{{ $student->id }}">
-                        {{ $student->student_name }}
+                        {{ $student->first_name }}
                     </label>
                     <input type="checkbox" id="resume-toggle-{{ $student->id }}" class="hidden" />
                     <div class="resume-popup bg-white w-64 h-32 absolute top-full left-0 hidden border border-gray-200 p-4 shadow">
@@ -45,9 +44,14 @@
                 </td>
                 <td class="px-6 py-4">{{ $student->activity }}</td>
                 <td class="px-6 py-4">{{ $student->overall_performance }}</td>
-                <td class="px-6 py-4">{{ $student->oop }}</td>
                 <td class="px-6 py-4">{{ $student->final_score }}</td>
-                <td class="px-6 py-4">{{ $student->languages }}</td>
+                <td class="px-6 py-4">
+                {{-- @foreach ($languages as $language)
+    @if ($language->student_id == 9)
+        {{ $language->language }}
+    @endif
+@endforeach --}}
+                </td>
             </tr>
             @endif
             @endforeach

@@ -11,11 +11,17 @@ return new class extends Migration
      */
     public function up(): void
     {
+    if(!Schema::hasTable('modules'))
         Schema::create('modules', function (Blueprint $table) {
             $table->id();
-            $table->string('module_title');
+            $table->integer('training_id');
+            $table->integer('student_id')->nullable();
+            $table->string('title');
             $table->text('description');
             $table->timestamps();
+
+            $table->foreign('training_id')->references('id')->on('trainings')->onDelete('cascade');
+            $table->foreign('student_id')->references('id')->on('students')->onDelete('cascade');
         });
     }
 

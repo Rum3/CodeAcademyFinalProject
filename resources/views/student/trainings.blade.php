@@ -15,7 +15,7 @@
                     <li class="task-list-item text-gray-500">
                         <input type="checkbox" class="task-checkbox hidden" id="{{ $lecture['id'] }}" />
                         <label for="{{ $lecture['id'] }}" class="task-title flex items-center cursor-pointer text-xl font-semibold uppercase" @click="{{ $lecture['id'] }}.checked = !{{ $lecture['id'] }}.checked">
-                            {{ $lecture['id'] }}: {{ $lecture['lecture_name'] }}
+                            {{ $lecture['id'] }}: {{ $lecture['title'] }}
                         </label>
                     </li>
                 @endforeach

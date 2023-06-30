@@ -15,12 +15,17 @@ return new class extends Migration
         Schema::create('lectures', function (Blueprint $table) {
             $table->id();
             $table->integer('module_id');
-            $table->string('lecture_name');
+            $table->integer('training_id');
+            $table->integer('student_id')->nullable();
+            $table->string('title');
             $table->longText('description');
+            $table->date('date');
             $table->text('homework')->nullable();
             $table->timestamps();
 
             $table->foreign('module_id')->references('id')->on('modules')->onDelete('cascade');
+            $table->foreign('training_id')->references('id')->on('trainings')->onDelete('cascade');
+            $table->foreign('student_id')->references('id')->on('students')->onDelete('cascade');
         });
 
 }

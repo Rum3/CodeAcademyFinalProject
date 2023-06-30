@@ -17,14 +17,12 @@ class StudentFactory extends Factory
     public function definition(): array
     {
         return [
-            'student_name' => fake()->name(),
-            'student_lastname' => fake()->name(),
+            'first_name' => fake()->name(),
+            'last_name' => fake()->name(),
             'email' => fake()->unique()->safeEmail(),
             'phone' => '0898882404',
             'country' => 'Bulgaria',
             'city' => 'Sofia',
-            'language' => 'Bulgarian',
-            'languageScore' => '1',
             'repository' => 'github.com/whatever',
             'information' => "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book."
         ];

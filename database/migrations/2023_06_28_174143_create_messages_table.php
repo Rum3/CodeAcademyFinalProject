@@ -11,11 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('project', function (Blueprint $table) {
+        if(!Schema::hasTable('messenger'))
+        Schema::create('messenger', function (Blueprint $table) {
             $table->id();
-            $table->string('project_name');
-            $table->float('score');
+            $table->integer('student_id');
+            $table->string('messenger');
             $table->timestamps();
+
+            $table->foreign('student_id')->references('id')->on('students')->onDelete('cascade');
         });
     }
 
@@ -24,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('project');
+        Schema::dropIfExists('messages');
     }
 };

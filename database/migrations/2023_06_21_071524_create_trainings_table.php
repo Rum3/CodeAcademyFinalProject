@@ -14,12 +14,13 @@ return new class extends Migration
         if(!Schema::hasTable('trainings'))
         Schema::create('trainings', function (Blueprint $table) {
             $table->id();
-            $table->string('training_title');
+            $table->string('title');
             $table->text('description');
             $table->date('start_date')->default(now());
             $table->date('end_date')->default(now());
             $table->integer('estimate')->default(10);
             $table->timestamps();
+
         });
     }
 

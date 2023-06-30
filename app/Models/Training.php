@@ -2,23 +2,55 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Module;
+use App\Models\Lecture;
+use App\Models\Project;
+use App\Models\Student;
+use App\Models\Homework;
+use App\Models\HomeworkTask;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Training extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'training_title',
+        'title',
         'description',
         'start_date',
         'end_date',
         'estimate',
     ];
 
-    // public function modules()
-    // {
-    //     return $this->hasMany(Module::class, 'training_id');
-    // }
+    public function students()
+    {
+        return $this->belongsToMany(Student::class)->withTimestamps();
+    }
+
+    public function modules()
+    {
+        return $this->hasMany(Module::class);
+    }
+
+    public function projects()
+    {
+        return $this->hasMany(Project::class);
+    }
+
+    public function lectures()
+    {
+        return $this->hasMany(Lecture::class);
+    }
+
+    public function homeworks()
+    {
+        return $this->hasMany(Homework::class);
+    }
+
+    public function homeworkTasks()
+    {
+        return $this->hasMany(HomeworkTask::class);
+    }
+
 }

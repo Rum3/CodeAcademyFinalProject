@@ -48,7 +48,7 @@
             <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownHoverButton">
                 @foreach ($trainings as $training)
                 <li>
-                    <a href="{{ route('progress')}}" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">{{ $training->training_title }}</a>
+                    <a href="{{ route('progress')}}" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">{{ $training->title }}</a>
                 </li>
                 @endforeach
             </ul>
@@ -85,7 +85,7 @@
        {{----------------------------------------------------------- Teacher Home Page -----------------------------------------------------------}}
     @elseif(Auth::user()->role == 'teacher')
     <nav class="flex justify-even items-center mb-4 bg-laravel h-20">
-        <a href ="{{ route('training.form') }}" id="tranings" class="text-white bg-none hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm-40 px-10 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">Tranings</a>
+        <a href ="{{ route('training.table') }}" id="tranings" class="text-white bg-none hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm-40 px-10 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">Tranings</a>
         <a href = "{{ route('student.table') }}" id="students" class="text-white bg-none hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm-40 px-10 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">Students</a>
         <a href = "/grades" id="grades" class="text-white bg-none hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm-40 px-10 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">Grades</a>
              <div class="text-red-200 text-2xl relative left-1/4">
@@ -126,7 +126,7 @@
             <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownHoverButton">
                 @foreach ($trainings as $training)
                 <li>
-                    <a href="{{ route('students-progress') }}" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">{{ $training->training_title }}</a>
+                    <a href="{{ route('students-progress') }}" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">{{ $training->title }}</a>
                 </li>
                 @endforeach
             </ul>
@@ -169,7 +169,7 @@
         <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownHoverButton">
             @foreach ($trainings as $training)
             <li>
-                <a href="{{ route('trainings', ['id'=>$training->id]) }}" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">{{ $training->training_title }}</a>
+                <a href="{{ route('trainings', ['id'=>$training->id]) }}" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">{{ $training->title }}</a>
             </li>
             @endforeach
         </ul>
@@ -211,7 +211,7 @@
             <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownHoverButton">
                 @foreach ($trainings as $training)
                 <li>
-                    <a href="{{ route('trainings', ['id'=>$training->id]) }}" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">{{ $training->training_title }}</a>
+                    <a href="{{ route('trainings', ['id'=>$training->id]) }}" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">{{ $training->title }}</a>
                 </li>
                 @endforeach
             </ul>
