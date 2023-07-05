@@ -15,11 +15,12 @@ return new class extends Migration
         Schema::create('languages', function (Blueprint $table) {
             $table->id();
             $table->integer('student_id');
+            $table->float('score',8,2);
             $table->string('language');
-            $table->float('score');
             $table->timestamps();
 
             $table->foreign('student_id')->references('id')->on('students')->onDelete('cascade');
+
         });
     }
 

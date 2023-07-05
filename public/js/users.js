@@ -1,7 +1,13 @@
 const roleSelect = document.getElementById('roleSelect');
-const trainingsContainer = document.getElementById('trainingsContainer');
+const trainingSelect = document.getElementById('trainingSelect');
 
 roleSelect.addEventListener('change', function() {
   const selectedRole = roleSelect.value;
-  trainingsContainer.style.display = (selectedRole === 'student' || selectedRole === 'teacher') ? 'block' : 'none';
+  console.log(selectedRole);
+  if(selectedRole == 4){
+    trainingSelect.classList.remove('hidden');
+  }else if(selectedRole == 1 || selectedRole == 5 || selectedRole == 'Select Role'){
+    trainingSelect.classList.remove('block');
+    trainingSelect.classList.add('hidden');
+  }
 });

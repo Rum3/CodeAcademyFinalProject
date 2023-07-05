@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Models\Student;
+use App\Models\LanguageScore;
 use Illuminate\Database\Eloquent\Model;
 
 class Language extends Model
@@ -15,6 +17,8 @@ class Language extends Model
         {
             return $this->belongsTo(Student::class);
         }
+
+
     }
 
 

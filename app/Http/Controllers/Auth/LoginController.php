@@ -58,14 +58,14 @@ class LoginController extends Controller
         if (Auth::attempt($userFields, $remember)) {
             $user = auth()->user();
             if ($user->active == 0) {
-                Auth::logout(); // log the user out
+                Auth::logout();
                 return back()->withErrors([
                     'name' => 'Please activate your account before logging in.',
                 ]);
             }
 
             $request->session()->regenerate();
-            return redirect('/');
+            return redirect('/')->with('message', "Welcome, $user->name!");;
         }
 
         return back()->withErrors(['name' => 'Invalid Credentials']);
@@ -79,6 +79,6 @@ class LoginController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect('/')->with('message', 'Успешно излизане!');
+        return redirect('/')->with('message', 'Hope to see you soon!');
     }
 }

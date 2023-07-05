@@ -53,7 +53,7 @@ hiddenScoreInput.name = 'score[]';
 hiddenScoreInput.value = score;
 listItem.appendChild(hiddenScoreInput);
 }
-} 
+}
 
 function addRepository() {
   var repositoryInput = document.getElementById('repository');
@@ -235,20 +235,6 @@ hiddenHobbyInput.value = hobby;
 listItem.appendChild(hiddenHobbyInput);
 }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 var addModuleButton = document.getElementById('add_module_title');

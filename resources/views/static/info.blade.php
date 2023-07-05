@@ -1,22 +1,18 @@
 @extends('layout')
-
 @section('title', 'За Нас')
-
 @section('content')
-
-<div class="info">
-
-    <h1>За кого е подходящо това обучение по програмиране?</h1>
-    <p>
-        Обучението по програмиране на Code Academy е фокусирано и практически насочено за професия младши програмист. Целта е завършилите  успешно да са способни да започнат работа веднага след края на курса. Подкрепяме нашите курсисти дори и след края на обучението, като им помагаме да се развиват успешно в желаната от тях област!
-
-        Търсим амбициозни и мотивирани хора, които искат да се развиват професионално като програмисти и не се отказват, когато срещнат трудности. Нашите курсове са много интензивни и изискват сериозно отношение от страна на обучаващите се, на което ние отговаряме с грижа, менторска подкрепа и много практика от реалния бизнес.
-
-        Желаещите да се запишат държат входящ технически тест, който ни ориентира за нивото на кандидатите, за да можем да сформираме хомогенни групи.
-
-        Code Academy е създадена за хора, които имат интерес към дигиталните технологии,  имат желание да се занимават с програмиране и то да стане тяхна професия.
-
-        Ако и ти искаш да се научиш да програмираш, ако искаш да допринесеш за технологичното развитие на България и знанията ти да са високо ценени,  трябва само да участваш АКТИВНО в нашите курсове.
+<div class="info  p-8 ml-40  w-3/4">
+    <h1 class="text-2xl font-bold mb-4">Reasons Why You Should Learn Computer Programming</h1>
+    <p class="text-gray-700">
+        Computer programmers are often curious people — a curiosity about how things work behind
+        the scenes often sparks them to a career in programming. Have you ever wondered how it's
+        possible for us to watch movies on our phones, how online dating apps work, or how Google
+        can fetch the answers to our biggest questions? If so, computer programming might be the
+        right fit for you.
+        In addition to creating useful websites and apps, learning computer programming also offers
+        a lot of benefits to the coder — honing their logic and reasoning, perseverance, and
+        communication skills.
+        Even though we are all dependent on technology in our daily lives, very few people know how to read and write code. So if you’re a complete beginner or an experienced non-programmer in tech, there are multiple reasons you should learn to code.
     </p>
 </div>
 @endsection

@@ -19,27 +19,27 @@ class ResetPasswordController extends Controller
 
     public function reset(Request $request)
     {
-        // Validate the request
+
         $request->validate([
             'token' => 'required',
-            // 'email' => 'required|email',
+
             'password' => 'required|confirmed|min:6',
         ]);
 
         $token = $request->token;
-        // $email = $request->email;
+
         $password = $request->password;
 
         $user = User::where('password_reset_token', $token)->first();
 
-        // Verify if the token matches
+
         if ($user->password_reset_token != $token) {
             return redirect()->back()->withErrors(['token' => 'Invalid token.']);
         }
 
-        // If token matches, reset the password
+
         $user->password = Hash::make($password);
-        $user->password_reset_token = ''; // Clear the reset token
+        $user->password_reset_token = '';
         $user->save();
 
         return redirect('/login')->with('message', 'Your password has been successfully reset. Please log in with your new password.');

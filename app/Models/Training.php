@@ -28,6 +28,16 @@ class Training extends Model
         return $this->belongsToMany(Student::class)->withTimestamps();
     }
 
+    public function employers()
+    {
+        return $this->belongsToMany(Training::class)->withTimestamps();
+    }
+
+    public function teachers()
+    {
+        return $this->belongsToMany(Teacher::class)->withTimestamps();
+    }
+
     public function modules()
     {
         return $this->hasMany(Module::class);

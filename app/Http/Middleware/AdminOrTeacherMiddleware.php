@@ -12,22 +12,21 @@ class AdminOrTeacherMiddleware
     /**
      * Handle an incoming request.
      *
-     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \Closure  $next
+     * @return mixed
      */
-    public function handle(Request $request, Closure $next): Response
+    public function handle($request, Closure $next)
     {
-        if(Auth::check()){
-            if(Auth::user()->role == 'admin' || Auth::user()->role == 'teacher') {
+        if (Auth::check()) {
+            $user = Auth::user();
+            if ($user->role->name === 'admin' || $user->role->name === 'teacher') {
                 return $next($request);
-            }else {
+            } else {
                 return redirect('/')->with('error', 'You must be admin or teacher!');
             }
-
-        }else {
-
+        } else {
             return redirect('/')->with('message', 'Login to access the website info');
         }
-
-        return $next($request);
     }
 }

@@ -1,9 +1,32 @@
 @extends('layout')
 @section('content')
-
-<a href="#" class="block max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
-    <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{{ $training->training_title }}</h5>
-    <p class="font-normal text-gray-700 dark:text-gray-400">{{ $training->description }}</p>
-</a>
-
+<link rel="stylesheet" href="{{ asset('css/background.css') }}">
+<body>
+<div class="flex justify-center">
+<div class="border border-grey w-3/4 p-4 mx-auto rounded-lg shadow">
+        <div class="flex justify-center mt-20">
+            <h1 class="text-4xl font-bold mb-4">{{ $training->title }}</h1>
+        </div>
+        <div class="flex justify-center mt-10">
+            <h2 class="text-2xl font-bold">What you will learn in this course?</h2>
+        </div>
+        <div class="flex justify-center mt-5">
+            <div class="border border-grey w-3/4 p-4 mx-auto rounded-lg shadow ">
+                <p class="text-gray-600 mb-2">{{ $training->description }}</p>
+            </div>
+        </div>
+        <div class="flex justify-center mt-5">
+            <div class="container">
+                <div>
+                    <p class="text-gray-600 mb-2">Start date: {{ $training->start_date }}</p>
+                    <p class="text-gray-600 mb-2">End date: {{ $training->end_date }}</p>
+                </div>
+                <div>
+                    <p class="text-gray-600">Estimate: {{ $training->estimate }} hours</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
 @endsection

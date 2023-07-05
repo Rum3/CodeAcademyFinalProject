@@ -72,7 +72,7 @@
                     </svg>
                 </a>
         </td>
-        
+
         <td class="px-6 py-4">
           <div class="flex">
               <a href="{{ route('training.edit', ['training' => $training->id]) }}" class="text-blue-500 mr-2">

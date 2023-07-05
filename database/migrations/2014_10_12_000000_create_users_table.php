@@ -12,7 +12,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-
+        if(!Schema::hasTable('users'))
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->string('name');
@@ -22,10 +22,14 @@ return new class extends Migration
             $table->boolean('active')->default(false);
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password_reset_token')->nullable();
-            $table->string('role')->default('regular');
+            $table->integer('role_id')->default(5);
             $table->rememberToken();
             $table->timestamps();
+
+            $table->foreign('role_id')->references('id')->on('roles')->onDelete('cascade');
         });
+
+
     }
 
     /**

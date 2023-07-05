@@ -1,128 +1,49 @@
 @extends('layout')
-
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-      .container {
-            max-width: 600px;
-        }
-</style>
 @section('content')
-<div class="container">
-    <form action="{{ url('store-input-fields') }}" method="POST">
-        @csrf
-        @if ($errors->any())
-        <div class="alert alert-danger" role="alert">
-            <ul>
-                @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-        @endif
-        @if (Session::has('success'))
-        <div class="alert alert-success text-center">
-            <p>{{ Session::get('success') }}</p>
-        </div>
-        @endif
-    <div class="form-group">
-        <label for="role">Menu for Role:</label>
-        <select class="form-control" id="role">
-            <option>Admin</option>
-            <option>Student</option>
-            <option>Employer</option>
-            <option>Teacher</option>
-            <option>Regular</option>
+<div class="container mx-auto py-6 px-3 mt-1">
+    <h1 class="text-3xl mb-4 font-bold text-left pr-4">Roles and Menu Items</h1>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <div class="mt-6">
+        <label for="role" class="block mb-2 text-sm text-gray-600 dark:text-gray-400">Select Role</label>
+        <select id="role" class="w-full p-2 rounded-lg border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+            <option selected>Select Role</option>
+            @foreach($roles as $role)
+                <option value="{{ $role->id }}">{{ ucfirst($role->name) }}</option>
+            @endforeach
         </select>
     </div>
-
-    <div class="card mt-4">
-        <div class="card-header d-flex justify-content-between align-items-center">
-            <div>Main</div>
-            <div>
-                @include('utils.buttons')
+    <h2 class="text-2xl mb-4 font-bold text-left pr-4 mt-6">Menu Items</h2>
+    @foreach($menuItems as $menuItem)
+        <div class="card mt-4">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <div>{{ ucfirst($menuItem->name) }}</div>
+                <div>
+                    <button onclick="assignMenuToRole(event, {{ $menuItem->id }})" class="btn btn-primary add-menu"><i class="fas fa-plus"></i></button>
+                    <button onclick="removeMenuFromRole(event, {{ $menuItem->id }})" class="btn btn-danger"><i class="fas fa-trash"></i></button>
+                </div>
             </div>
         </div>
-        <div class="card-body">
-            <div class="card">
-                <div class="card-header d-flex justify-content-between align-items-center">
-                    <div>Info</div>
-                    <div>
-                        @include('utils.buttons')
-                    </div>
-                </div>
-            </div>
-
-            <div class="card mt-2">
-                <div class="card-header d-flex justify-content-between align-items-center">
-                    <div>Available Trainings</div>
-                    <div>
-                        @include('utils.buttons')
-                    </div>
-                </div>
-                <div class="card-body">
-                    <div class="card">
-                        <div class="card-header d-flex justify-content-between align-items-center">
-                            <div>Overall Progress</div>
-                            <div>
-                                @include('utils.buttons')
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card mt-2">
-                        <div class="card-header d-flex justify-content-between align-items-center">
-                            <div>Grades</div>
-                            <div>
-                                @include('utils.buttons')
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card mt-2">
-                        <div class="card-header d-flex justify-content-between align-items-center">
-                            <div>Training</div>
-                            <div>
-                                @include('utils.buttons')
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+    @endforeach
+    <form id="newMenuItemForm" onsubmit="event.preventDefault(); createMenuItem(event);">
+        <label for="newMenuItem" class="block mb-2 text-sm text-gray-600 dark:text-gray-400">Add New Menu Item</label>
+        <input type="text" id="newMenuItem" class="w-full p-2 rounded-lg border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+        <input type="text" id="newRoute" class="w-full p-2 rounded-lg border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+        <button type="submit" class="mt-2 btn btn-primary">Create</button>
+    </form>
+    <h2 class="text-2xl mb-4 font-bold text-left pr-4 mt-6">Assigned Items</h2>
+    <div id="rolesTable" class="mt-8">
+        <div class="border border-gray-300 rounded-lg p-5">
+            @foreach($roles as $role)
+                <p><strong>{{ ucfirst($role->name) }}</strong>: <span id="{{ $role->id }}-menu-items">{{ $role->menuItems->pluck('name')->implode(', ') }}</span></p>
+            @endforeach
         </div>
     </div>
-    </form>
 </div>
-
-@endsection
-
-@push('scripts')
-<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"></script>
-
-<script type="text/javascript">
-   $(document).ready(function() {
-    var i = 0;
-
-    $(".add").click(function () {
-        ++i;
-        $("#dynamicAddRemove").append(
-            '<div class="card">' +
-                '<div class="card-header d-flex justify-content-between align-items-center">' +
-                    '<div>Content here...</div>' +
-                    '<div>' +
-                        '<button class="btn btn-success add"><i class="fas fa-plus"></i></button>' +
-                        '<button class="btn btn-primary edit"><i class="fas fa-pen"></i></button>' +
-                        '<button class="btn btn-primary file"><i class="fas fa-file"></i></button>' +
-                        '<button class="btn btn-danger remove"><i class="fas fa-trash"></i></button>' +
-                    '</div>' +
-                '</div>' +
-            '</div>'
-        );
-    });
-
-    $(document).on('click', '.remove', function () {
-        $(this).parents('.card').remove();
-    });
-});
-
+<script>
+    var create_menu_item_route = "{{ route('create.menu.item') }}";
+    var assign_menu_route = "{{ route('assign.menu.to.role') }}";
+    var remove_menu_route = "{{ route('remove.menu.from.role') }}";
+    var csrf_token = "{{ csrf_token() }}";
 </script>
-
-@endpush
+<script src="{{ asset('js/pages.js') }}"></script>
+@endsection

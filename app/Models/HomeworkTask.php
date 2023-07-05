@@ -16,9 +16,7 @@ class HomeworkTask extends Model
         'module_id',
         'lecture_id',
         'homework_id',
-        'has_homework',
-        'not_working',
-        'on_time',
+        'status',
         'grade'
     ];
 

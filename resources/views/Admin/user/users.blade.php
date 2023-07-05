@@ -23,7 +23,7 @@
               <div class="text-gray-400">{{ $user->email }}</div>
             </div>
           </td>
-          <td class="px-6 py-4">{{ $user->role }}</td>
+          <td class="px-6 py-4">{{ $user->role()->first()->name }}</td>
           <td class="px-6 py-4">
             <div class="flex gap-1">
                 {{ $user->created_at }}

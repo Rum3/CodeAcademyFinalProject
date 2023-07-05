@@ -20,25 +20,25 @@ class ForgotPasswordController extends Controller
         $request->validate([
             'email' => 'required|email|exists:users',
         ]);
-    
+
         $user = User::where('email', $request->email)->first();
-        
-        // Generate password reset token
+
+
         $token = Str::random(60);
-    
-        // Save token in the database
+
+
         $user->password_reset_token = $token;
         $user->save();
-        
-        // Send password reset email
+
+
         $resetUrl = route('password.reset', ['token' => $token]);
-        
+
 
         Mail::send('auth.passwords.email_reset_link', ['resetUrl' => $resetUrl, 'name' => $user->name], function($message) use ($user) {
             $message->to($user->email);
             $message->subject('Reset your password');
         });
-    
+
         return redirect('/')->with('message', 'Password reset link sent. Please check your email.');
     }
 }

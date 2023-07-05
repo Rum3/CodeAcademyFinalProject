@@ -1,5 +1,7 @@
 @extends('layout')
 @section('content')
+<link rel="stylesheet" href="{{ asset('css/background.css') }}">
+<body>
 <div id="container" class="max-w-2xl mx-auto p-8 bg-gray-100">
     @if(session('success'))
         <div class="alert alert-success">{{ session('success') }}</div>
@@ -25,24 +27,31 @@
 
         @if (!isset($lecture))
         <label for="lecture_title" class="font-bold mb-2 block bg-green-500 p-2 rounded inline-block" id="add_lecture_label">+ ADD Lecture</label><br>
-    @endif
-        <input type="text" id="lecture_title" name="{{ isset($lecture) ? 'lecture_title' : 'lecture_title[]' }}"  placeholder="Title" required class="w-full px-3 py-2 rounded border border-gray-300 mb-4"><br>
-        <textarea id="lecture_description" name="{{ isset($lecture) ? 'lecture_description' : 'lecture_description[]' }}" placeholder="Description" required class="w-full px-3 py-2 rounded border border-gray-300 mb-4"></textarea><br><br>
-        <input type="date" id="lecture_date" name="{{ isset($lecture) ? 'lecture_date' : 'lecture_date[]' }}" required class="w-full px-3 py-2 rounded border border-gray-300 mb-4">
-
+         @endif
+        <input type="text" id="lecture_title" name="{{ isset($lecture) ? 'lecture_title' : 'lecture_title[]' }}"  placeholder="Title"  class="w-full px-3 py-2 rounded border border-gray-300 mb-4"><br>
+        <textarea id="lecture_description" name="{{ isset($lecture) ? 'lecture_description' : 'lecture_description[]' }}" placeholder="Description"  class="w-full px-3 py-2 rounded border border-gray-300 mb-4"></textarea><br><br>
+        <input type="date" id="lecture_date" name="{{ isset($lecture) ? 'lecture_date' : 'lecture_date[]' }}"  class="w-full px-3 py-2 rounded border border-gray-300 mb-4">
 
         <ul id="lecture_list"></ul>
 
-        <input type="visible" name="module_id_hidden" id="module_id_hidden" value="">
-        <input type="hidden" name="training_id" id="training_id" value="{{ $training->id }}">
+        <input type="hidden" name="module_id_hidden" id="module_id_hidden" value="">
+        @if(request()->routeIs('lecture'))
+            <input type="hidden" name="training_id" id="training_id" value="{{ $training->id }}">
+        @elseif(request()->routeIs('lecture.edit'))
+            <input type="hidden" type="text">
+        @endif
         <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded float-right">SAVE</button>
     </form>
 </div>
 
+</body>
+<!-- <script src="{{ asset('js/lecture.js') }}"></script> -->
+
+
 
 <script>
-var addLectureButton = document.getElementById('add_lecture_label');
-addLectureButton.addEventListener('click', function() {
+    var addLectureButton = document.getElementById('add_lecture_label');
+    addLectureButton.addEventListener('click', function() {
   var lectureTitleInput = document.getElementById('lecture_title');
   var lectureDescriptionInput = document.getElementById('lecture_description');
   var lectureTitle = lectureTitleInput.value;
@@ -107,16 +116,16 @@ addLectureButton.addEventListener('click', function() {
     hiddenDateInput.value = lectureDate;
     listItem.appendChild(hiddenDateInput);
       }
-});
+    });
 
 
 
 
 
-    document.getElementById('module_id').addEventListener('change', function () {
+        document.getElementById('module_id').addEventListener('change', function () {
         var selectedModuleId = this.value;
         document.getElementById('module_id_hidden').value = selectedModuleId;
-    });
+        });
 </script>
 
   <script src="{{ asset('js/app.js') }}"></script>

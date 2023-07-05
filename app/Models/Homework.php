@@ -13,14 +13,8 @@ use Illuminate\Database\Eloquent\Model;
 class Homework extends Model
 {
     protected $table = 'homeworks';
-    protected $fillable = [
-        'tasks',
-        'description',
-        'lecture_id',
-        'module_id',
-        'training_id'
+    protected $fillable = ['title', 'lecture_id', 'module_id', 'student_id', 'training_id', 'description'];
 
-    ];
 
     public function student()
     {

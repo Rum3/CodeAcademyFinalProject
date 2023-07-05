@@ -6,10 +6,12 @@
         <form action="{{ route('deleteStudent', $student->id) }}" method="POST" class="mt-4">
             @csrf
             @method('DELETE')
-            <button type="submit" class="px-8 py-4 bg-red-500 text-white rounded  text-4xl" >Delete</button>
+            <button type="submit" class="px-8 py-4 bg-red-500 text-white rounded text-4xl">YES</button>
+            <a href="{{ route('student.table') }}" class="px-8 py-4 bg-green-500 text-white rounded text-4xl ml-4">NO</a>
         </form>
     </div>
 </div>
+
 ​
 ​
 @endsection

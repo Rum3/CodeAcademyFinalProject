@@ -35,7 +35,7 @@ class RegisterController extends Controller
             'name' => $request['name'],
             'email' => $request['email'],
             'password' => Hash::make($request['password']),
-            'activation_token' => $activation_token, // Save token in the database
+            'activation_token' => $activation_token,
             'active' => 0,
             'remember_token' => '',
             'password_reset_token' => '',

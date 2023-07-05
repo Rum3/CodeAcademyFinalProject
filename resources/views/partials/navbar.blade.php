@@ -1,15 +1,15 @@
 
 @auth
+
+
 {{----------------------------------------------------------- Admin Home Page -----------------------------------------------------------}}
-    @if(Auth::user()->role == 'admin')
+    @if(Auth::user()->hasRole('admin'))
     <nav class="flex justify-even items-center mb-4 bg-laravel h-20">
     <a href ="{{ route('training.table') }}" id="tranings" class="text-white bg-none hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm-40 px-10 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">Tranings</a>
     <a href = "{{ route('student.table') }}" id="students" class="text-white bg-none hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm-40 px-10 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">Students</a>
     <a href = "{{ route('grades.form') }}" id="grades" class="text-white bg-none hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm-40 px-10 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">Grades</a>
     <a href = "{{ route('pages') }}" id="pages" class="text-white bg-none hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm-40 px-10 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">Pages</a>
-      {{-- <div class="text-red-200 text-2xl w-50">
-          <a href="/"><h1>CodeAcademy</h1></a>
-      </div> --}}
+
 
     <ul class="flex space-x-4 mr-8 text-lg postition absolute right-5">
         <li class="hover:text-black text-white">
@@ -28,7 +28,7 @@
                 <a href="{{ route('admin.dashboard') }}" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Admin Dashboard</a>
               </li>
               <li>
-                <a href="{{ route('acc-settings') }}" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Account settings</a>
+                <a href="{{ route('account.settings') }}" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Account settings</a>
               </li>
               <li>
                 <a href="{{ route('logout') }}" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Logout</a>
@@ -37,20 +37,23 @@
         </div>
     </ul>
     </nav>
+
 {{----------------------------------------------------------- End of Admin Home Page -----------------------------------------------------------}}
 
 {{----------------------------------------------------------- Student Home Page -----------------------------------------------------------}}
-    @elseif(Auth::user()->role == 'student')
+    @elseif(Auth::user()->hasRole('student'))
     <nav class="flex justify-even items-center mb-4 bg-laravel h-20">
         <button id="dropdownHoverButton" data-dropdown-toggle="dropdownHover" data-dropdown-trigger="hover" class="text-white bg-none hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm-40 px-20 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">Available Tranings<svg class="w-4 h-4 ml-2" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg></button>
-        <!-- Dropdown menu -->
+
         <div id="dropdownHover" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
             <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownHoverButton">
-                @foreach ($trainings as $training)
-                <li>
-                    <a href="{{ route('progress')}}" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">{{ $training->title }}</a>
-                </li>
+                @if (Auth::user()->student()->exists())
+                @foreach (Auth::user()->student->first()->trainings as $training)
+                    <li>
+                        <a href="{{ route('dashboard',['id'=>$training->id]) }}" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">{{ $training->title }}</a>
+                    </li>
                 @endforeach
+            @endif
             </ul>
         </div>
       <div class="text-red-200 text-2xl relative left-1/4">
@@ -70,8 +73,11 @@
         </svg>{{ auth()->user()->name }}</button>
         <div id="dropdownHover2" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
             <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownHoverButton2">
+                <li>
+                    <a href="{{ route('showCvUploadForm') }}" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Upload CV</a>
+                </li>
               <li>
-                <a href="{{ route('acc-settings') }}" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Account settings</a>
+                <a href="{{ route('account.settings') }}" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Account settings</a>
               </li>
               <li>
                 <a href="{{ route('logout') }}" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Logout</a>
@@ -83,12 +89,17 @@
  {{----------------------------------------------------------- End of Student Home Page -----------------------------------------------------------}}
 
        {{----------------------------------------------------------- Teacher Home Page -----------------------------------------------------------}}
-    @elseif(Auth::user()->role == 'teacher')
+    @elseif(Auth::user()->hasRole('teacher'))
     <nav class="flex justify-even items-center mb-4 bg-laravel h-20">
-        <a href ="{{ route('training.table') }}" id="tranings" class="text-white bg-none hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm-40 px-10 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">Tranings</a>
-        <a href = "{{ route('student.table') }}" id="students" class="text-white bg-none hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm-40 px-10 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">Students</a>
-        <a href = "/grades" id="grades" class="text-white bg-none hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm-40 px-10 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">Grades</a>
-             <div class="text-red-200 text-2xl relative left-1/4">
+
+        @foreach ($menuItems as $menuItem)
+        @if ($menuItem->roles->contains('name', 'teacher'))
+            <a href="{{ route($menuItem->route) }}" id="{{ $menuItem->id }}" class="text-white bg-none hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm-40 px-10 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">{{ $menuItem->name }}</a>
+        @endif
+    @endforeach
+
+
+        <div class="text-red-200 text-2xl relative left-1/4">
                  <a href="/" ><h1>CodeAcademy</h1></a>
              </div>
 
@@ -106,7 +117,7 @@
                <div id="dropdownHover2" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
                    <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownHoverButton2">
                      <li>
-                       <a href="{{ route('acc-settings') }}" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Account settings</a>
+                       <a href="{{ route('account.settings') }}" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Account settings</a>
                      </li>
                      <li>
                        <a href="{{ route('logout') }}" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Logout</a>
@@ -118,17 +129,23 @@
         {{----------------------------------------------------------- End of Teacher Home Page -----------------------------------------------------------}}
 
     {{----------------------------------------------------------- Employer Home Page -----------------------------------------------------------}}
-    @elseif(Auth::user()->role == 'employer')
+    @elseif(Auth::user()->hasRole('employer'))
        <nav class="flex justify-even items-center mb-4 bg-laravel h-20">
         <button id="dropdownHoverButton" data-dropdown-toggle="dropdownHover" data-dropdown-trigger="hover" class="text-white bg-none hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm-40 px-20 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">Available Tranings<svg class="w-4 h-4 ml-2" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg></button>
         <!-- Dropdown menu -->
         <div id="dropdownHover" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
             <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownHoverButton">
-                @foreach ($trainings as $training)
-                <li>
-                    <a href="{{ route('students-progress') }}" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">{{ $training->title }}</a>
-                </li>
+                @php
+                $employer = Auth::user()->employer->first();
+                @endphp
+
+            @if ($employer && $employer->trainings()->exists())
+                @foreach ($employer->trainings as $training)
+                    <li>
+                        <a href="{{ route('students.performance', ['id' => $training->id]) }}" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">{{ $training->title }}</a>
+                    </li>
                 @endforeach
+            @endif
             </ul>
         </div>
              <div class="text-red-200 text-2xl w-50">
@@ -149,7 +166,7 @@
                <div id="dropdownHover2" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
                    <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownHoverButton2">
                      <li>
-                       <a href="{{ route('acc-settings') }}" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Account settings</a>
+                       <a href="{{ route('account.settings') }}" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Account settings</a>
                      </li>
                      <li>
                        <a href="{{ route('logout') }}" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Logout</a>
@@ -164,7 +181,7 @@
         {{----------------------------------------------------------- Regular Home Page -----------------------------------------------------------------}}
     <nav class="flex justify-between items-center mb-4 bg-laravel h-20">
     <button id="dropdownHoverButton" data-dropdown-toggle="dropdownHover" data-dropdown-trigger="hover" class="text-white bg-none hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm-40 px-20 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">Available Tranings<svg class="w-4 h-4 ml-2" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg></button>
-    <!-- Dropdown menu -->
+
     <div id="dropdownHover" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
         <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownHoverButton">
             @foreach ($trainings as $training)
@@ -192,7 +209,7 @@
         <div id="dropdownHover2" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
             <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownHoverButton2">
               <li>
-                <a href="{{ route('acc-settings') }}" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Account settings</a>
+                <a href="{{ route('account.settings') }}" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Account settings</a>
               </li>
               <li>
                 <a href="{{ route('logout') }}" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Logout</a>

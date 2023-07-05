@@ -1,18 +1,10 @@
 @extends('layout')
 @section('content')
+<h1 class="relative top-15 left-0 right-10 w-full flex items-center justify-center bg-gradient-to-r from-red-400 via-yellow-400 to-green-400 ">
+  <span class="font-bold text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl text-blue-500 opacity-80">Team</span>
+  <span class="text-xs sm:text-sm md:text-base lg:text-lg xl:text-5xl text-Blue-500 opacity-80">Concatenators</span>
+</h1><br>
+<h1 class="text-4xl text-blue-500 text-center">FINAL PROJECT</h1><br>
 
-<h1 class="relative top-15 left-0 right-10 w-full flex font-bold items-center text-sm-20 justify-center">Обучение по програмиране на разбираем език и с ясна идея за професионална реализация</h1>
-<div class="relative bottom-26 left-0 right-10 w-full flex items-center justify-center">
-    <ul>
-        <li>-Целта е придобиване на ИТ професия, а не просто научаване на определен език за програмиране.</li>
-        <li>-Обучението е с кратък срок и твоят ментор ще ти съдейства да започнеш работа!</li>
-        <li>-Времетраенето на всеки курс е по-малко от 1 година.</li>
-        <li>-Включва комбинация от технологии и ще участваш в разработката на истински проекти.</li>
-        <li>-Ще имаш ментор и той ще ти помогне да се реализираш.</li>
-    </ul>
-</div>
 @include('Utils.alert')
-
 @endsection
-
-

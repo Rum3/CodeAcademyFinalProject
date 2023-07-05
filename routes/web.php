@@ -1,16 +1,18 @@
 <?php
 
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\MenuController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\PagesController;
 use App\Http\Controllers\GradesController;
+use App\Http\Controllers\EmployerController;
 use App\Http\Controllers\StudentsController;
 use App\Http\Controllers\TrainingController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\AdminStudentsController;
 use App\Http\Controllers\AdminTrainingController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\AccountSettingsController;
 use App\Http\Controllers\Auth\ActivationController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
@@ -66,9 +68,16 @@ Route::group(['controller' => AdminController::class, 'middleware' => ['role:adm
     Route::get('/admin/dashboard/users/edit/{id}', 'showEditForm')->name('users.edit');
     Route::put('/admin/dashboard/users/update/{id}', 'updateUser')->name('user.update');
     Route::delete('/admin/dashboard/users/delete/{id}', 'deleteUser')->name('user.delete');
-    Route::get('/admin/pages', 'showPages')->name('pages');
-    Route::get('/grades','showGradesForm')->name('grades.form');
+    Route::get('/admin/dashboard/roles', 'showRoles')->name('roles.table');
+    Route::get('/admin/dashboard/roles/form', 'showRolesForm')->name('role.form');
+    Route::post('/admin/dashboard/roles/add', 'createRole')->name('role.create');
+    Route::get('/admin/dashboard/roles/edit/{id}', 'showRolesEditForm')->name('role.edit');
+    Route::put('/admin/dashboard/roles/update/{id}', 'updateRole')->name('role.update');
+    Route::delete('/admin/dashboard/roles/delete/{id}', 'deleteRole')->name('role.delete');
+
 });
+
+Route::get('/grades',[AdminController::class,'showGradesForm'])->name('grades.form')->middleware('isAdminOrTeacher');
 
 
 Route::group(['controller' => AdminStudentsController::class, 'middleware' => ['isAdminOrTeacher']], function() {
@@ -113,24 +122,43 @@ Route::group(['controller' => AdminTrainingController::class, 'middleware' => ['
 });
 
 
-Route::get('students/progress',[StudentsController::class,'showOverallProgress'])->name('students-progress')->middleware('role:employer');
+Route::get('students/performance/{id}',[EmployerController::class,'showPerformance'])->name('students.performance')->middleware('role:employer');
 
 Route::group(['controller'=>StudentsController::class, 'middleware'=>['role:student']], function(){
-    Route::get('/dashboard/progress','showOverallProgress')->name('progress');
-    Route::get('/dashboard/grades','showGrades')->name('grades');
-    Route::get('/dashboard/training','showTrainings')->name('training');
-    Route::get('/student/download-resume/{id}','downloadResume')->name('downloadResume');
+    Route::get('/dashboard/progress/{id}','showOverallProgress')->name('progress');
+    Route::get('/dashboard/{id}','showOverallProgress')->name('dashboard');
+    Route::get('/dashboard/grades/{id}','showGrades')->name('grades');
+    Route::get('/dashboard/training/{id}','showTrainings')->name('training');
+    Route::get('/files/{file}','download')->name('file.download');
+
 });
 
+Route::get('/student/download-resume/{id}',[StudentsController::class,'downloadCv'])->name('downloadCv')->middleware('auth');
+
+Route::get('/cv-upload',[AdminStudentsController::class, 'showCvUploadForm'])->name('showCvUploadForm');
+Route::post('storeCv', [AdminStudentsController::class, 'storeCv'])->name('storeCv');
 
 Route::get('activate/{token}', [ActivationController::class, 'activating'])->name('activate');
 
-Route::group(['controller' => ForgotPasswordController::class], function(){
+
     Route::get('password/reset', [ForgotPasswordController::class,'showLinkRequestForm'])->name('password.request');
     Route::post('password/email', [ForgotPasswordController::class, 'sendResetLinkEmail'])->name('password.email');
     Route::get('password/reset/{token}', [ResetPasswordController::class,'showResetForm'])->name('password.reset');
     Route::post('password/reset', [ResetPasswordController::class,'reset'])->name('password.update');
+
+
+Route::group(['controller'=> AccountSettingsController::class], function() {
+    Route::get('/account/settings', 'accountSettings')->name('account.settings');
+    Route::get('/account/profile','showProfile')->name('profileInformation.show');
+    Route::put('/account/profile','updateProfile')->name('profileInformation.update');
+    Route::get('/account/password','showPassword')->name('changePassword.show');
+    Route::put('/account/password','updatePassword')->name('changePassword.update');
 });
 
-
-
+Route::group(['controller'=> MenuController::class], function() {
+    Route::get('/admin/pages', 'showPages')->name('pages')->middleware('role:admin');
+    Route::any('/assign-menu-to-role', 'assignMenuToRole')->name('assign.menu.to.role');
+    Route::delete('/remove-menu-from-role', 'removeMenuFromRole')->name('remove.menu.from.role');
+    Route::get('/role-specific-menus', 'getRoleSpecificMenus')->middleware('auth')->name('role.specific.menus');
+    Route::post('/create-menu-item', 'createMenuItem')->name('create.menu.item');
+});

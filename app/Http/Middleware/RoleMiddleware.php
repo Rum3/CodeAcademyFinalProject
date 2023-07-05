@@ -3,16 +3,18 @@
 namespace App\Http\Middleware;
 
 use Closure;
+use App\Models\Role;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class RoleMiddleware
 {
     protected $roles = [
-        'student' => 'student',
-        'teacher' => 'teacher',
-        'employer' => 'employer',
         'admin' => 'admin',
+        'teacher' => 'teacher',
+        'student' => 'student',
+        'employer' => 'employer',
+        'regular' => 'regular',
     ];
     /**
      * Handle an incoming request.
@@ -25,7 +27,8 @@ class RoleMiddleware
             return redirect('/')->with('message', 'Login to access the website info');
         }
 
-        if (!isset($this->roles[$role]) || auth()->user()->role !== $role) {
+        $roleModel = Role::where('name', $role)->first();
+        if (!$roleModel || auth()->user()->role_id !== $roleModel->id) {
             return redirect(to: '/')->with('error', 'You are not '.$role.'!');
         }
 

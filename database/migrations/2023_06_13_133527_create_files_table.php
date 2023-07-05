@@ -15,7 +15,12 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('path')->nullable();
+            $table->unsignedBigInteger('student_id'); // New column for the student id
             $table->timestamps();
+            // Adding the foreign key constraint
+            $table->foreign('student_id')
+                ->references('id')->on('students')
+                ->onDelete('cascade');
         });
     }
 

@@ -44,6 +44,7 @@
         @csrf
         <input type="file" name="file">
         <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" type="submit">Качване</button>
+        <input type="hidden" name="training_id" value="{{ isset($training) ? $training->id : '' }}">
     </form>
     </div>
     </div>

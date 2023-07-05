@@ -6,26 +6,23 @@ use App\Models\Module;
 use App\Models\Lecture;
 use App\Models\Homework;
 use App\Models\Training;
+use App\Models\FileTraining;
 use Illuminate\Http\Request;
+use App\Http\Requests\StoreLectureRequest;
+use App\Http\Requests\StoreHomeworkRequest;
+use App\Http\Requests\StoreTrainingRequest;
 
 class AdminTrainingController extends Controller
 {
     public function showTrainingTable() {
-        return view('admin.trainingTable');
+        return view('admin.training.trainingTable');
     }
     public function showTrainingForm() {
-        return view('admin.trainingForm');
+        return view('admin.training.trainingForm');
     }
 
-    public function storeTraining(Request $request) {
+    public function storeTraining(StoreTrainingRequest $request) {
 
-        $request->validate([
-            'title' => 'required',
-            'description' => 'required',
-            'start_date' => 'required|date',
-            'end_date' => 'required|date',
-            'estimate' => 'nullable|integer',
-        ]);
 
         Training::create([
             'title' => $request->input('title'),
@@ -40,7 +37,7 @@ class AdminTrainingController extends Controller
     public function showTrainingEditForm($training) {
 
         $trainingData = Training::find($training);
-        return view('admin.trainingForm', ['training' => $trainingData]);
+        return view('admin.training.trainingForm', ['training' => $trainingData]);
     }
 
     public function updateTraining(Request $request, Training $training) {
@@ -67,14 +64,14 @@ class AdminTrainingController extends Controller
     public function showModule($id) {
 
         $training = Training::find($id);
-        return view('admin.module', compact('training'));
+        return view('admin.training.module', compact('training'));
     }
     public function showModuleTable($id) {
 
         $training = Training::find($id);
         $modules = Module::all();
 
-        return view('admin.moduleTable', compact('training' , 'modules'));
+        return view('admin.training.moduleTable', compact('training' , 'modules'));
     }
 
     public function storeModule(Request $request, int $id) {
@@ -95,37 +92,30 @@ class AdminTrainingController extends Controller
             $module->training_id = $training->id;
             $module->save();
         }
-        return redirect()->back()->with('success', 'Операцията беше успешна!');
+        return redirect()->back()->with('success', 'The module is added successfully');
     }
 
-    public function editModule($module, $id) {
-
-        $training = Training::find($id);
+    public function editModule($training, $module) {
+        $training = Training::find($training);
         $moduleData = Module::find($module);
-
-        return view('admin.module', ['module' => $moduleData, 'training' => $training]);
+        return view('admin.training.module', ['module' => $moduleData, 'training' => $training]);
     }
-
     public function updateModule(Request $request, $id, $moduleId) {
-
         $training = Training::findOrFail($id);
         $module = Module::findOrFail($moduleId);
-
         $validatedData = $request->validate([
             'module_title' => 'required',
             'description' => 'required',
         ]);
-
         $module->title = $validatedData['module_title'];
         $module->description = $validatedData['description'];
         $module->save();
-
-        return redirect()->back()->with('success', 'Module updated successfully.');
+        return redirect()->back()->with('success', 'The module is updated successfully!');
     }
     public function deleteModule(Module $module) {
 
         $module->delete();
-        return redirect()->back()->with('success', 'You delete the training');
+        return redirect()->back()->with('success', 'You delete the module');
     }
 
     public function showLecture($id) {
@@ -133,7 +123,7 @@ class AdminTrainingController extends Controller
         $training = Training::find($id);
         $modules = Module::all();
 
-        return view('admin.lecture', compact('training' , 'modules'));
+        return view('admin.training.lecture', compact('training' , 'modules'));
     }
 
     public function showLectureTable($id) {
@@ -141,20 +131,11 @@ class AdminTrainingController extends Controller
         $training = Training::find($id);
         $modules = Module::all();
         $lectures = Lecture::all();
-        return view('admin.lectureTable', compact('lectures','modules','training'));
+        return view('admin.training.lectureTable', compact('lectures','modules','training'));
     }
 
-    public function storeLecture(Request $request)
+    public function storeLecture(StoreLectureRequest $request)
     {
-        // $trainingId = Training::find($id);
-
-        $request->validate([
-            'lecture_title.*' => 'required',
-            'lecture_description.*' => 'required',
-            'lecture_date.*' => 'required',
-            'module_id' => 'required',
-            'training_id' => 'required',
-        ]);
         $lectureTitles = $request->input('lecture_title');
         $lectureDescriptions = $request->input('lecture_description');
         $lectureDates = $request->input('lecture_date');
@@ -171,13 +152,13 @@ class AdminTrainingController extends Controller
             $lecture->save();
             $lectures[] = $lecture;
         }
-        return redirect()->back()->with('success', 'Лекциите бяха записани успешно.');
+        return redirect()->back()->with('success', 'The lectures were added succesfully!');
     }
 
     public function editLecture($lecture) {
 
         Lecture::find($lecture);
-        return view('admin.lecture', ['lecture' => $lecture]);
+        return view('admin.training.lecture', ['lecture' => $lecture]);
     }
 
     public function updateLecture(Request $request, Lecture $lecture) {
@@ -198,7 +179,9 @@ class AdminTrainingController extends Controller
     public function deleteLecture(Lecture $lecture) {
 
         $lecture->delete();
-        return redirect()->back()->with('success', 'You delete the training');
+        return redirect()->back()->with('success', 'You delete the lecture');
+
+
     }
 
     public function showHomework($id) {
@@ -207,18 +190,11 @@ class AdminTrainingController extends Controller
         $modules = Module::all();
         $lectures = Lecture::all();
 
-        return view('admin.homework', compact('training' , 'modules' , 'lectures'));
+        return view('admin.training.homework', compact('training' , 'modules' , 'lectures'));
     }
 
-    public function storeHomework(Request $request) {
+    public function storeHomework(StoreHomeworkRequest $request) {
 
-        $request->validate([
-            'training_id' => 'required',
-            'module_id' => 'required',
-            'lecture_id' => 'required',
-            'tasks.*' => 'required',
-            'description.*' => 'required',
-        ]);
         $lectureId = $request->input('lecture_id');
         $trainingId = $request->input('training_id');
         $moduleId = $request->input('module_id');
@@ -238,34 +214,35 @@ class AdminTrainingController extends Controller
     }
 
     public function showHomeworkTable($id) {
-
-        $module = Module::find($id);
+        $training = Training::find($id);
+        $module = Module::all();
         $lectures = Lecture::all();
         $homeworks = Homework::all();
-
-        return view('admin.homeworkTable', compact('homeworks','lectures','module'));
+        return view('admin.training.homeworkTable', compact('homeworks','lectures','module','training'));
     }
-
     public function editHomework($homework) {
-
-        Homework::find($homework);
-
-        return view('admin.homework', ['homework' => $homework]);
+        $lectures = Lecture::all();
+        $homework = Homework::find($homework);
+        $training = Training::find($homework->training_id);
+        return view('admin.training.homework', ['homework' => $homework, 'lectures' => $lectures, 'training' => $training]);
     }
 
     public function updateHomework(Request $request, Homework $homework) {
 
         $validatedData = $request->validate([
-            'tasks'=> 'required',
+            'titles'=> 'required',
             'description'=> 'required',
         ]);
-        $homework->tasks = $validatedData['tasks'];
+
+        $homework->title = $validatedData['titles'];
         $homework->description = $validatedData['description'];
 
-        $homework->save($validatedData);
+        $homework->update($validatedData);
 
-        return redirect()->back()->with('success', 'lecture updated successfully.');
+        return redirect()->back()->with('success', 'Homework task updated successfully.');
     }
+
+
 
     public function deleteHomework(Homework $homework) {
 
@@ -274,6 +251,24 @@ class AdminTrainingController extends Controller
         return redirect()->back()->with('success', 'You delete the training');
     }
 
+    public function upload(Request $request)
+    {
+        $trainingId = $request->input('training_id');
 
+        if (empty($trainingId)) {
+            return redirect()->back()->with('error', 'Please add a training first.');
+        }
+
+        if ($request->hasFile('file')) {
+            $file = $request->file('file');
+            $fileTraining = new FileTraining();
+            $fileTraining->trainingId;
+            $fileTraining->name = $file->getClientOriginalName();
+            $fileTraining->path = $file->store('file_training');
+            $fileTraining->save();
+            return redirect()->back()->with('success');
+        }
+
+    }
 
 }

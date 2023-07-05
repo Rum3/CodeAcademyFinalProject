@@ -19,9 +19,7 @@ return new class extends Migration
             $table->integer('module_id');
             $table->integer('training_id');
             $table->integer('student_id')->nullable();
-            $table->boolean('has_homework');
-            $table->boolean('not_working');
-            $table->boolean('on_time');
+            $table->string('status');
             $table->decimal('grade',8,2);
             $table->timestamps();
 

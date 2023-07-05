@@ -26,10 +26,13 @@ class Student extends Model
     protected $fillable = [
         'first_name',
         'last_name',
+        'email',
         'phone',
         'country',
         'city',
+        'user_id',
         'information',
+        'selectedTrainings'
     ];
 
     public function user()
@@ -39,7 +42,7 @@ class Student extends Model
 
     public function trainings()
     {
-    return $this->belongsToMany(Training::class)->withTimestamps();
+        return $this->belongsToMany(Training::class, 'student_training', 'student_id', 'training_id')->withTimestamps();
     }
 
     public function messengers()
@@ -95,5 +98,10 @@ class Student extends Model
     public function absence()
     {
         return $this->hasMany(Absence::class);
+    }
+
+    public function cv()
+    {
+        return $this->hasOne(File::class);
     }
 }

@@ -7,8 +7,9 @@ let lecturesDropdown = document.getElementById('lectures');
 let studentsDropdown = document.getElementById('student');
 let homeworkTable = document.getElementById('homework-table-body');
 let lectureDateElement = document.getElementById('lecture_date');
+let absenceContainer = document.getElementById('absence_container');
 
-//Populate Trainings
+
 fetch('/trainings/fetch')
   .then(response => response.json())
   .then(data => {
@@ -219,36 +220,50 @@ function populateLectures(dropdown, options) {
 
 
 lecturesDropdown.addEventListener('change', function () {
-  let selectedLecture = this.value;
-  document.getElementById('lecture_id').value = selectedLecture;
+    let selectedLecture = this.value;
+    document.getElementById('lecture_id').value = selectedLecture;
 
-  let selectedModule = modulesDropdown.value;
-  let selectedTraining = trainingsDropdown.value;
-  let selectedStudent = studentsDropdown.value;
+    let selectedModule = modulesDropdown.value;
+    let selectedTraining = trainingsDropdown.value;
+    let selectedStudent = studentsDropdown.value;
 
-
-  homeworkTable.classList.remove('hidden');
-
-  if (selectedLecture == 'Select lecture') {
-    homeworkTable.classList.add('hidden');
-    document.getElementById('average-lecture-grade').textContent = '';
-    return;
-  }
-
-  fetch('/lectures/' + selectedLecture + '/modules/' + selectedModule + '/trainings/' + selectedTraining + '/students/' + selectedStudent + '/average-grade')
-  .then(response => {
-    if (!response.ok) {
-      throw new Error('Network response was not ok');
+    // Check if the selected lecture is the default "Select lecture" option
+    if (selectedLecture == 'Select lecture') {
+      homeworkTable.style.display = 'none';
+      absenceContainer.style.display = 'none';
+      document.getElementById('average-lecture-grade').textContent = '';
+      return;
     }
-    return response.json();
-  })
-  .then(data => {
-    console.log('lectures:',data)
-    document.getElementById('average-lecture-grade').textContent = data.average_grade_lecture;
-  })
-  .catch(error => {
-    console.error('Error:', error);
-  });
+
+    // Hide the homework table
+    homeworkTable.style.display = 'none';
+    absenceContainer.style.display = 'none';
+
+    fetch('/lectures/' + selectedLecture + '/modules/' + selectedModule + '/trainings/' + selectedTraining + '/students/' + selectedStudent + '/average-grade')
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
+      .then(data => {
+        console.log('lectures:', data);
+        document.getElementById('average-lecture-grade').textContent = data.average_grade_lecture;
+
+
+        if (data.average_grade_lecture !== null) {
+
+          homeworkTable.style.display = 'none';
+          absenceContainer.style.display = 'none';
+        } else {
+
+          homeworkTable.style.display = 'table-row-group';
+          absenceContainer.style.display = 'block';
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
 
   fetch('/homework/fetch', {
     method: 'POST',
@@ -275,6 +290,8 @@ lecturesDropdown.addEventListener('change', function () {
     });
 });
 
+
+
 function updateHomeworkTable(table, data) {
     table.innerHTML = '';
 
@@ -282,7 +299,6 @@ function updateHomeworkTable(table, data) {
     let gradeInputs = [];
 
     data.forEach(function (row) {
-      console.log('id:', row.id);
       homeworkIds.push(row.id);
       let newRow = document.createElement('tr');
       newRow.classList.add('bg-white', 'border-b', 'dark:bg-gray-800', 'dark:border-gray-700');
